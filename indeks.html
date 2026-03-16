@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Pegawai — BPS Kota Banjar</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --biru: #003580;
+    --biru-mid: #1a5ca8;
+    --biru-light: #e8f0fb;
+    --biru-accent: #2e7de9;
+    --merah: #d32f2f;
+    --kuning: #f9a825;
+    --abu: #f4f6f9;
+    --abu-gelap: #6b7280;
+    --teks: #111827;
+    --teks-sub: #4b5563;
+    --putih: #ffffff;
+    --border: #e2e8f0;
+    --shadow: 0 2px 16px rgba(0,53,128,0.08);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--abu);
+    color: var(--teks);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #002060 0%, #003580 60%, #1a5ca8 100%);
+    color: white;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 40%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 28px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-bps {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 0.82rem;
+    opacity: 0.75;
+    margin-top: 4px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .header-bottom {
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .header-nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    overflow-x: auto;
+  }
+  .nav-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 12px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s, border-bottom 0.2s;
+    border-bottom: 2px solid transparent;
+    letter-spacing: 0.02em;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    color: white;
+    border-bottom: 2px solid var(--kuning);
+  }
+
+  /* ── SEARCH ── */
+  .search-bar {
+    max-width: 1100px;
+    margin: 28px auto 0;
+    padding: 0 28px;
+  }
+  .search-wrap {
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--abu-gelap);
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background: white;
+    color: var(--teks);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .search-wrap input:focus {
+    border-color: var(--biru-accent);
+    box-shadow: 0 0 0 3px rgba(46,125,233,0.12);
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1100px;
+    margin: 24px auto 60px;
+    padding: 0 28px;
+  }
+
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    color: var(--biru);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--biru-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--biru-accent);
+    flex-shrink: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    padding: 18px 18px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--card-accent, var(--biru-accent));
+    border-radius: 0;
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,53,128,0.12);
+    border-color: var(--card-accent, var(--biru-accent));
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card-name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--teks);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.78rem;
+    color: var(--teks-sub);
+    line-height: 1.5;
+  }
+  .card-tag {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--biru-light);
+    color: var(--biru);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* search no result */
+  .no-result {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--abu-gelap);
+    font-size: 0.95rem;
+    display: none;
+  }
+  .no-result svg { display: block; margin: 0 auto 12px; opacity: 0.4; }
+
+  /* footer */
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--abu-gelap);
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    background: white;
+  }
+  footer strong { color: var(--biru); }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 20px 16px; gap: 14px; }
+    .header-text h1 { font-size: 1.2rem; }
+    .logo-bps { width: 50px; height: 50px; }
+    main, .search-bar { padding: 0 16px; }
+    .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <!-- BPS Logo SVG -->
+    <svg class="logo-bps" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="12" fill="rgba(255,255,255,0.12)"/>
+      <text x="32" y="22" text-anchor="middle" font-family="serif" font-size="10" fill="white" font-weight="bold">BPS</text>
+      <rect x="10" y="28" width="44" height="3" rx="1.5" fill="#f9a825"/>
+      <rect x="10" y="35" width="44" height="3" rx="1.5" fill="white" opacity="0.6"/>
+      <rect x="10" y="42" width="44" height="3" rx="1.5" fill="white" opacity="0.3"/>
+      <text x="32" y="56" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,0.7)">STATISTIK</text>
+    </svg>
+    <div class="header-text">
+      <h1>Portal Pegawai BPS Kota Banjar</h1>
+      <p>Badan Pusat Statistik · Kota Banjar · Jawa Barat</p>
+    </div>
+  </div>
+  <div class="header-bottom">
+    <nav class="header-nav">
+      <button class="nav-btn active" onclick="showSection('semua', this)">🗂 Semua</button>
+      <button class="nav-btn" onclick="showSection('teknis', this)">📊 Teknis & Statistik</button>
+      <button class="nav-btn" onclick="showSection('administrasi', this)">📋 Administrasi</button>
+      <button class="nav-btn" onclick="showSection('keuangan', this)">💰 Keuangan</button>
+      <button class="nav-btn" onclick="showSection('sdm', this)">👤 SDM & Kepegawaian</button>
+      <button class="nav-btn" onclick="showSection('referensi', this)">📚 Referensi</button>
+    </nav>
+  </div>
+</header>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Cari aplikasi atau link..." oninput="filterCards(this.value)">
+  </div>
+</div>
+
+<main>
+  <div class="no-result" id="no-result">
+    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Tidak ada hasil untuk pencarian tersebut.
+  </div>
+
+  <!-- ═══ TEKNIS & STATISTIK ═══ -->
+  <section class="section visible" data-cat="teknis">
+    <div class="section-title"><span class="dot"></span>Teknis & Statistik</div>
+    <div class="grid">
+
+      <a href="https://webapi.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="webapi bps">
+        <span class="card-icon">🌐</span>
+        <div class="card-name">Web API BPS</div>
+        <div class="card-desc">Akses data statistik BPS melalui API resmi.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://silastik.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="silastik">
+        <span class="card-icon">📈</span>
+        <div class="card-name">SILASTIK</div>
+        <div class="card-desc">Sistem informasi layanan statistik terpadu BPS.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://sensus.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="sensus online">
+        <span class="card-icon">📝</span>
+        <div class="card-name">Sensus Online</div>
+        <div class="card-desc">Portal pendataan dan pengisian kuesioner sensus.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://capi.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="capi survei">
+        <span class="card-icon">📱</span>
+        <div class="card-name">CAPI / Survei Mobile</div>
+        <div class="card-desc">Pengumpulan data lapangan berbasis CAPI.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://susenas.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="susenas">
+        <span class="card-icon">🏠</span>
+        <div class="card-name">SUSENAS</div>
+        <div class="card-desc">Survei Sosial Ekonomi Nasional.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://sakernas.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="sakernas">
+        <span class="card-icon">👷</span>
+        <div class="card-name">SAKERNAS</div>
+        <div class="card-desc">Survei Angkatan Kerja Nasional.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://jabar.bps.go.id/id/publications.html" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="publikasi jabar">
+        <span class="card-icon">📚</span>
+        <div class="card-name">Publikasi BPS Jabar</div>
+        <div class="card-desc">Katalog publikasi statistik Provinsi Jawa Barat.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+      <a href="https://banjarkota.bps.go.id" target="_blank" class="card" style="--card-accent:#2e7de9" data-name="website bps banjar">
+        <span class="card-icon">🏛️</span>
+        <div class="card-name">Website BPS Kota Banjar</div>
+        <div class="card-desc">Portal resmi BPS Kota Banjar beserta publikasi lokal.</div>
+        <span class="card-tag">Teknis</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══ ADMINISTRASI ═══ -->
+  <section class="section visible" data-cat="administrasi">
+    <div class="section-title"><span class="dot" style="background:#d32f2f"></span>Administrasi & Persuratan</div>
+    <div class="grid">
+
+      <a href="https://naskah.bps.go.id" target="_blank" class="card" style="--card-accent:#d32f2f" data-name="naskah dinas surat">
+        <span class="card-icon">✉️</span>
+        <div class="card-name">Naskah Dinas (SIKS)</div>
+        <div class="card-desc">Sistem pengelolaan surat dan naskah dinas BPS.</div>
+        <span class="card-tag">Administrasi</span>
+      </a>
+
+      <a href="https://tnde.bps.go.id" target="_blank" class="card" style="--card-accent:#d32f2f" data-name="tnde tata naskah digital">
+        <span class="card-icon">📄</span>
+        <div class="card-name">TNDE</div>
+        <div class="card-desc">Tata Naskah Dinas Elektronik — arsip digital resmi.</div>
+        <span class="card-tag">Administrasi</span>
+      </a>
+
+      <a href="https://pengadaan.bps.go.id" target="_blank" class="card" style="--card-accent:#d32f2f" data-name="pengadaan barang jasa">
+        <span class="card-icon">🛒</span>
+        <div class="card-name">Pengadaan Barang & Jasa</div>
+        <div class="card-desc">Portal informasi pengadaan internal BPS.</div>
+        <span class="card-tag">Administrasi</span>
+      </a>
+
+      <a href="https://lpse.bps.go.id" target="_blank" class="card" style="--card-accent:#d32f2f" data-name="lpse e-procurement">
+        <span class="card-icon">🏷️</span>
+        <div class="card-name">LPSE BPS</div>
+        <div class="card-desc">Layanan Pengadaan Secara Elektronik BPS.</div>
+        <span class="card-tag">Administrasi</span>
+      </a>
+
+      <a href="https://www.lpse.lkpp.go.id" target="_blank" class="card" style="--card-accent:#d32f2f" data-name="lkpp lpse nasional">
+        <span class="card-icon">🏗️</span>
+        <div class="card-name">LKPP / SPSE Nasional</div>
+        <div class="card-desc">Sistem Pengadaan Secara Elektronik nasional (LKPP).</div>
+        <span class="card-tag">Administrasi</span>
+      </a>
+
+      <a href="https://arsip.bps.go.id" target="_blank" class="card" style="--card-accent:#d32f2f" data-name="arsip dokumen">
+        <span class="card-icon">🗄️</span>
+        <div class="card-name">Sistem Kearsipan</div>
+        <div class="card-desc">Pengelolaan arsip dan dokumen kelembagaan BPS.</div>
+        <span class="card-tag">Administrasi</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══ KEUANGAN ═══ -->
+  <section class="section visible" data-cat="keuangan">
+    <div class="section-title"><span class="dot" style="background:#f9a825"></span>Keuangan & Anggaran</div>
+    <div class="grid">
+
+      <a href="https://span.kemenkeu.go.id" target="_blank" class="card" style="--card-accent:#f9a825" data-name="span sistem perbendaharaan anggaran">
+        <span class="card-icon">💳</span>
+        <div class="card-name">SPAN</div>
+        <div class="card-desc">Sistem Perbendaharaan dan Anggaran Negara Kemenkeu.</div>
+        <span class="card-tag">Keuangan</span>
+      </a>
+
+      <a href="https://omspan.kemenkeu.go.id" target="_blank" class="card" style="--card-accent:#f9a825" data-name="omspan monitoring">
+        <span class="card-icon">📊</span>
+        <div class="card-name">OMSPAN</div>
+        <div class="card-desc">Online Monitoring SPAN — pemantauan realisasi anggaran.</div>
+        <span class="card-tag">Keuangan</span>
+      </a>
+
+      <a href="https://sakti.kemenkeu.go.id" target="_blank" class="card" style="--card-accent:#f9a825" data-name="sakti akuntansi instansi">
+        <span class="card-icon">📒</span>
+        <div class="card-name">SAKTI</div>
+        <div class="card-desc">Sistem Aplikasi Keuangan Tingkat Instansi (Kemenkeu).</div>
+        <span class="card-tag">Keuangan</span>
+      </a>
+
+      <a href="https://renja.bps.go.id" target="_blank" class="card" style="--card-accent:#f9a825" data-name="renja perencanaan anggaran">
+        <span class="card-icon">📋</span>
+        <div class="card-name">Renja BPS</div>
+        <div class="card-desc">Sistem perencanaan dan penganggaran internal BPS.</div>
+        <span class="card-tag">Keuangan</span>
+      </a>
+
+      <a href="https://e-rekon.kemenkeu.go.id" target="_blank" class="card" style="--card-accent:#f9a825" data-name="e-rekon rekonsiliasi laporan keuangan">
+        <span class="card-icon">🔄</span>
+        <div class="card-name">e-Rekon LK</div>
+        <div class="card-desc">Rekonsiliasi Laporan Keuangan dengan Kemenkeu.</div>
+        <span class="card-tag">Keuangan</span>
+      </a>
+
+      <a href="https://sipp.kemenkeu.go.id" target="_blank" class="card" style="--card-accent:#f9a825" data-name="sipp perbendaharaan">
+        <span class="card-icon">🏦</span>
+        <div class="card-name">SIPP Kemenkeu</div>
+        <div class="card-desc">Sistem Informasi Perbendaharaan dan Pengelolaan.</div>
+        <span class="card-tag">Keuangan</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══ SDM & KEPEGAWAIAN ═══ -->
+  <section class="section visible" data-cat="sdm">
+    <div class="section-title"><span class="dot" style="background:#1D9E75"></span>SDM & Kepegawaian</div>
+    <div class="grid">
+
+      <a href="https://siasn.bkn.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="siasn bkn asn">
+        <span class="card-icon">👤</span>
+        <div class="card-name">SIASN BKN</div>
+        <div class="card-desc">Sistem Informasi ASN — data kepegawaian nasional.</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://mysapk.bkn.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="mysapk pns">
+        <span class="card-icon">🪪</span>
+        <div class="card-name">MySAPK BKN</div>
+        <div class="card-desc">Layanan kepegawaian mandiri PNS (kenaikan pangkat, dll).</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://e-kinerja.bkn.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="e-kinerja SKP penilaian">
+        <span class="card-icon">📈</span>
+        <div class="card-name">e-Kinerja BKN</div>
+        <div class="card-desc">Sistem penilaian kinerja ASN dan pengelolaan SKP.</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://sisdm.bps.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="sisdm pegawai bps">
+        <span class="card-icon">🗃️</span>
+        <div class="card-name">SISDM BPS</div>
+        <div class="card-desc">Sistem manajemen SDM internal BPS.</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://sscasn.bkn.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="sscasn rekrutmen cpns">
+        <span class="card-icon">📝</span>
+        <div class="card-name">SSCASN</div>
+        <div class="card-desc">Portal rekrutmen CPNS dan PPPK nasional.</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://gaji.bps.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="slip gaji payroll">
+        <span class="card-icon">💰</span>
+        <div class="card-name">Slip Gaji / Payroll</div>
+        <div class="card-desc">Akses slip gaji dan informasi tunjangan pegawai BPS.</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://presensi.bps.go.id" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="presensi absensi kehadiran">
+        <span class="card-icon">🕐</span>
+        <div class="card-name">Presensi / Absensi</div>
+        <div class="card-desc">Sistem pencatatan kehadiran pegawai BPS.</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+      <a href="https://lan.go.id/web/portal-diklat" target="_blank" class="card" style="--card-accent:#1D9E75" data-name="diklat pelatihan asn lan">
+        <span class="card-icon">🎓</span>
+        <div class="card-name">Portal Diklat LAN</div>
+        <div class="card-desc">Pelatihan dan pengembangan kompetensi ASN (LAN).</div>
+        <span class="card-tag">SDM</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══ REFERENSI ═══ -->
+  <section class="section visible" data-cat="referensi">
+    <div class="section-title"><span class="dot" style="background:#7f77dd"></span>Referensi & Regulasi</div>
+    <div class="grid">
+
+      <a href="https://peraturan.bps.go.id" target="_blank" class="card" style="--card-accent:#534AB7" data-name="peraturan regulasi kebijakan">
+        <span class="card-icon">⚖️</span>
+        <div class="card-name">Peraturan BPS</div>
+        <div class="card-desc">Kumpulan peraturan dan kebijakan internal BPS.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://jdih.bps.go.id" target="_blank" class="card" style="--card-accent:#534AB7" data-name="jdih hukum">
+        <span class="card-icon">📜</span>
+        <div class="card-name">JDIH BPS</div>
+        <div class="card-desc">Jaringan Dokumentasi dan Informasi Hukum BPS.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://jdih.setneg.go.id" target="_blank" class="card" style="--card-accent:#534AB7" data-name="jdih setneg regulasi nasional">
+        <span class="card-icon">🏛️</span>
+        <div class="card-name">JDIH Setneg</div>
+        <div class="card-desc">Regulasi dan peraturan perundangan nasional.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://banjarkota.go.id" target="_blank" class="card" style="--card-accent:#534AB7" data-name="pemkot banjar pemerintah kota">
+        <span class="card-icon">🏙️</span>
+        <div class="card-name">Pemerintah Kota Banjar</div>
+        <div class="card-desc">Portal resmi Pemkot Banjar — koordinasi pemerintah daerah.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://jabar.go.id" target="_blank" class="card" style="--card-accent:#534AB7" data-name="pemprov jawa barat">
+        <span class="card-icon">🌄</span>
+        <div class="card-name">Pemprov Jawa Barat</div>
+        <div class="card-desc">Portal resmi Pemerintah Provinsi Jawa Barat.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://bps.go.id" target="_blank" class="card" style="--card-accent:#534AB7" data-name="bps pusat nasional">
+        <span class="card-icon">🌏</span>
+        <div class="card-name">BPS Pusat</div>
+        <div class="card-desc">Website resmi Badan Pusat Statistik Republik Indonesia.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://mail.google.com" target="_blank" class="card" style="--card-accent:#534AB7" data-name="email gmail dinas">
+        <span class="card-icon">📧</span>
+        <div class="card-name">Email Dinas</div>
+        <div class="card-desc">Akses email dinas pegawai BPS.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+      <a href="https://drive.google.com" target="_blank" class="card" style="--card-accent:#534AB7" data-name="google drive dokumen cloud">
+        <span class="card-icon">☁️</span>
+        <div class="card-name">Google Drive Dinas</div>
+        <div class="card-desc">Penyimpanan dan berbagi dokumen kerja tim.</div>
+        <span class="card-tag">Referensi</span>
+      </a>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 <strong>BPS Kota Banjar</strong> — Jl. Kapten Jamhur No.1, Kota Banjar, Jawa Barat &nbsp;|&nbsp; Portal Internal Pegawai
+</footer>
+
+<script>
+  const allCards = document.querySelectorAll('.card');
+  const sections = document.querySelectorAll('.section');
+
+  function showSection(cat, btn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('search').value = '';
+    document.getElementById('no-result').style.display = 'none';
+
+    sections.forEach(s => {
+      if (cat === 'semua' || s.dataset.cat === cat) {
+        s.classList.add('visible');
+        s.querySelectorAll('.card').forEach(c => c.style.display = '');
+      } else {
+        s.classList.remove('visible');
+      }
+    });
+  }
+
+  function filterCards(q) {
+    const val = q.toLowerCase().trim();
+    let anyVisible = false;
+
+    sections.forEach(s => s.classList.add('visible'));
+
+    allCards.forEach(card => {
+      const name = (card.dataset.name || '') + ' ' + (card.querySelector('.card-name')?.textContent || '') + ' ' + (card.querySelector('.card-desc')?.textContent || '');
+      const match = !val || name.toLowerCase().includes(val);
+      card.style.display = match ? '' : 'none';
+      if (match) anyVisible = true;
+    });
+
+    // hide empty sections
+    sections.forEach(s => {
+      const visible = [...s.querySelectorAll('.card')].some(c => c.style.display !== 'none');
+      s.classList.toggle('visible', visible);
+    });
+
+    document.getElementById('no-result').style.display = anyVisible ? 'none' : 'block';
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    if (!val) {
+      document.querySelector('.nav-btn').classList.add('active');
+    }
+  }
+</script>
+</body>
+</html>
